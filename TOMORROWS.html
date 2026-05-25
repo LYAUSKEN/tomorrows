@@ -27,18 +27,31 @@ body{background:#000;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu 
 .tri-right{border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:15px solid #fff;}
 .day-header-grid{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid #1a1a1a;}
 .day-header-cell{padding:10px 0 8px;text-align:center;font-size:11px;font-weight:500;color:#555;letter-spacing:0.5px;}
+
+/* Calendar cell - vertical layout: date bar on top, photo below */
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);flex:1;}
-.cal-cell{border-right:1px solid #111;border-bottom:1px solid #111;min-height:64px;display:flex;flex-direction:column;align-items:center;padding-top:8px;cursor:pointer;position:relative;overflow:hidden;}
+.cal-cell{border-right:1px solid #111;border-bottom:1px solid #111;display:flex;flex-direction:column;cursor:pointer;position:relative;min-height:80px;}
 .cal-cell:nth-child(7n){border-right:none;}
-.cal-cell:active{background:#111;}
+.cal-cell:active{opacity:0.7;}
 .cal-cell.empty{cursor:default;}
-.cal-cell.has-photo:active{background:transparent;}
-.cal-photo-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:grayscale(100%) brightness(0.45);z-index:0;}
-.cal-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:400;color:#fff;position:relative;z-index:1;}
-.cal-cell.today .cal-num{background:#fff;color:#000;font-weight:700;}
-.cal-cell.selected .cal-num{background:#fff;color:#000;outline:2px solid #fff;outline-offset:2px;}
-.dot-row{display:flex;gap:3px;margin-top:4px;position:relative;z-index:1;}
-.dot{width:4px;height:4px;border-radius:50%;background:#fff;}
+.cal-cell.empty:active{opacity:1;}
+
+/* Date bar - top black strip */
+.cal-date-bar{background:#000;display:flex;align-items:center;justify-content:center;padding:6px 0 5px;flex-shrink:0;z-index:1;}
+.cal-cell.today .cal-date-bar{background:#fff;}
+.cal-cell.selected .cal-date-bar{background:#fff;outline:2px solid #fff;outline-offset:-2px;}
+.cal-num{font-size:13px;font-weight:400;color:#fff;line-height:1;}
+.cal-cell.today .cal-num{color:#000;font-weight:700;}
+.cal-cell.selected .cal-num{color:#000;font-weight:700;}
+
+/* Photo area - below date bar */
+.cal-photo-area{flex:1;min-height:44px;position:relative;overflow:hidden;background:#000;}
+.cal-photo-img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%) brightness(0.5);display:block;}
+
+.dot-row{display:flex;gap:2px;justify-content:center;padding:3px 0;position:absolute;bottom:2px;left:0;right:0;}
+.dot{width:3px;height:3px;border-radius:50%;background:#fff;}
+
+/* Panel */
 .panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:flex-end;justify-content:center;}
 .panel{width:100%;max-width:390px;background:#111;border-top:1px solid #333;border-radius:20px 20px 0 0;padding:0 0 48px;animation:slideUp 0.28s cubic-bezier(0.16,1,0.3,1);max-height:88vh;overflow-y:auto;}
 @keyframes slideUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
@@ -52,6 +65,16 @@ body{background:#000;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu 
 .photo-cell{aspect-ratio:1;border:1px solid #333;border-radius:6px;overflow:hidden;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#0a0a0a;}
 .photo-cell img{width:100%;height:100%;object-fit:cover;}
 .photo-cell.add{color:#444;font-size:22px;}
+
+/* Text memo */
+.text-input{width:100%;background:#0a0a0a;border:1px solid #333;border-radius:8px;padding:12px;color:#fff;font-size:14px;font-family:inherit;resize:none;min-height:80px;line-height:1.6;margin-bottom:8px;}
+.text-input:focus{outline:none;border-color:#666;}
+.text-save-btn{width:100%;padding:10px;border-radius:8px;font-size:12px;font-weight:600;letter-spacing:1px;cursor:pointer;font-family:inherit;background:#000;border:1px solid #333;color:#fff;}
+.text-save-btn:active{background:#222;}
+.text-saved{background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:12px;color:#ccc;font-size:14px;line-height:1.6;margin-bottom:8px;white-space:pre-wrap;word-break:break-all;}
+.text-edit-btn{background:none;border:none;color:#555;font-size:10px;font-weight:600;letter-spacing:1px;cursor:pointer;font-family:inherit;margin-bottom:8px;}
+
+/* Voice memo */
 .memo-item{border:1px solid #222;border-radius:8px;padding:10px 12px;margin-bottom:8px;}
 .memo-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
 .memo-time{font-size:10px;color:#555;flex:1;}
@@ -66,6 +89,8 @@ body{background:#000;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu 
 @keyframes recPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,0.15);}50%{box-shadow:0 0 0 8px rgba(255,255,255,0);}}
 .rec-dot{width:8px;height:8px;border-radius:50%;background:currentColor;}
 .retake-hint{font-size:10px;color:#555;text-align:center;margin-top:8px;}
+
+/* Lightbox */
 .lightbox{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;animation:fadeIn 0.2s ease;}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 .lightbox-header{display:flex;align-items:center;justify-content:space-between;padding:52px 20px 12px;flex-shrink:0;}
@@ -82,6 +107,27 @@ body{background:#000;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu 
 .lb-tri-right{width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:13px solid #fff;display:block;}
 .lightbox-dots{display:flex;justify-content:center;gap:6px;padding:16px 0 40px;}
 .lightbox-dot{width:5px;height:5px;border-radius:50%;background:#fff;}
+
+/* Slideshow */
+.slideshow{position:fixed;inset:0;background:#000;z-index:300;display:flex;flex-direction:column;}
+.slideshow-header{display:flex;align-items:center;justify-content:space-between;padding:52px 20px 12px;flex-shrink:0;}
+.slideshow-title{font-size:12px;color:#555;letter-spacing:2px;}
+.slideshow-close{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;}
+.slideshow-main{flex:1;display:flex;align-items:center;justify-content:center;padding:0 20px;overflow:hidden;}
+.slideshow-photo{max-width:100%;max-height:100%;object-fit:contain;border:4px solid #fff;border-radius:2px;animation:ssIn 0.4s ease;}
+.slideshow-text-card{width:100%;padding:32px 24px;border:1px solid #333;border-radius:8px;color:#ccc;font-size:16px;line-height:1.8;white-space:pre-wrap;word-break:break-all;animation:ssIn 0.4s ease;}
+.slideshow-audio-card{width:100%;padding:24px;border:1px solid #333;border-radius:8px;display:flex;flex-direction:column;align-items:center;gap:16px;animation:ssIn 0.4s ease;}
+.slideshow-audio-icon{font-size:48px;color:#555;}
+.slideshow-audio-time{font-size:11px;color:#555;letter-spacing:1px;}
+.slideshow-audio-card audio{width:100%;filter:invert(1);}
+@keyframes ssIn{from{opacity:0;transform:scale(0.97);}to{opacity:1;transform:scale(1);}}
+.slideshow-footer{padding:16px 20px 40px;display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0;}
+.slideshow-progress{display:flex;gap:4px;}
+.ss-dot{width:4px;height:4px;border-radius:50%;background:#fff;}
+.slideshow-controls{display:flex;gap:16px;align-items:center;}
+.ss-ctrl-btn{background:none;border:1px solid #333;border-radius:50%;width:44px;height:44px;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.ss-play-btn{background:#fff;border:none;border-radius:50%;width:56px;height:56px;color:#000;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.ss-type-label{font-size:9px;color:#444;letter-spacing:2px;text-transform:uppercase;}
 </style>
 </head>
 <body>
@@ -92,32 +138,10 @@ const MONTH_NAMES=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","
 function getDaysInMonth(y,m){return new Date(y,m+1,0).getDate();}
 function getFirstDay(y,m){return new Date(y,m,1).getDay();}
 
-const DB_NAME="tomorrows_db";
-const STORE="entries";
-function openDB(){
-  return new Promise((res,rej)=>{
-    const req=indexedDB.open(DB_NAME,1);
-    req.onupgradeneeded=e=>e.target.result.createObjectStore(STORE,{keyPath:"id"});
-    req.onsuccess=e=>res(e.target.result);
-    req.onerror=rej;
-  });
-}
-async function dbGetAll(){
-  const db=await openDB();
-  return new Promise((res,rej)=>{
-    const req=db.transaction(STORE,"readonly").objectStore(STORE).getAll();
-    req.onsuccess=e=>{const o={};e.target.result.forEach(r=>o[r.id]=r.data);res(o);};
-    req.onerror=rej;
-  });
-}
-async function dbSet(id,data){
-  const db=await openDB();
-  return new Promise((res,rej)=>{
-    const tx=db.transaction(STORE,"readwrite");
-    tx.objectStore(STORE).put({id,data});
-    tx.oncomplete=res;tx.onerror=rej;
-  });
-}
+const DB_NAME="tomorrows_db";const STORE="entries";
+function openDB(){return new Promise((res,rej)=>{const req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=e=>e.target.result.createObjectStore(STORE,{keyPath:"id"});req.onsuccess=e=>res(e.target.result);req.onerror=rej;});}
+async function dbGetAll(){const db=await openDB();return new Promise((res,rej)=>{const req=db.transaction(STORE,"readonly").objectStore(STORE).getAll();req.onsuccess=e=>{const o={};e.target.result.forEach(r=>o[r.id]=r.data);res(o);};req.onerror=rej;});}
+async function dbSet(id,data){const db=await openDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).put({id,data});tx.oncomplete=res;tx.onerror=rej;});}
 
 function App(){
   const today=new Date();
@@ -132,43 +156,62 @@ function App(){
   const [retakeIdx,setRetakeIdx]=React.useState(null);
   const [photoIdx,setPhotoIdx]=React.useState({});
   const [lightbox,setLightbox]=React.useState(null);
+  const [slideshow,setSlideshow]=React.useState(null); // {items:[],idx:0,playing:false}
+  const [textMode,setTextMode]=React.useState(false);
+  const [textDraft,setTextDraft]=React.useState("");
   const mediaRecorderRef=React.useRef(null);
   const chunksRef=React.useRef([]);
   const timerRef=React.useRef(null);
+  const ssTimerRef=React.useRef(null);
   const fileInputRef=React.useRef(null);
   const replaceIdxRef=React.useRef(null);
 
-  React.useEffect(()=>{
-    dbGetAll().then(d=>{setEntries(d);setLoaded(true);}).catch(()=>setLoaded(true));
-  },[]);
+  React.useEffect(()=>{dbGetAll().then(d=>{setEntries(d);setLoaded(true);}).catch(()=>setLoaded(true));},[]);
 
-  const key=selected?`${year}-${month+1}-${selected}`:null;
-  const entry=key?(entries[key]||{photos:[],memos:[]}):null;
+  // Slideshow auto-advance
+  React.useEffect(()=>{
+    if(slideshow&&slideshow.playing){
+      ssTimerRef.current=setTimeout(()=>{
+        const next=slideshow.idx+1;
+        if(next>=slideshow.items.length){setSlideshow(s=>Object.assign({},s,{playing:false}));}
+        else{setSlideshow(s=>Object.assign({},s,{idx:next}));}
+      },3000);
+    }
+    return()=>clearTimeout(ssTimerRef.current);
+  },[slideshow]);
+
+  const key=selected?year+"-"+(month+1)+"-"+selected:null;
+  const entry=key?(entries[key]||{photos:[],memos:[],text:""}):null;
 
   function prevMonth(){if(month===0){setYear(y=>y-1);setMonth(11);}else setMonth(m=>m-1);setSelected(null);setPanel(false);}
   function nextMonth(){if(month===11){setYear(y=>y+1);setMonth(0);}else setMonth(m=>m+1);setSelected(null);setPanel(false);}
-  function selectDay(d){setSelected(d);setPanel(true);}
+  function selectDay(d){
+    const k=year+"-"+(month+1)+"-"+d;
+    const e=entries[k]||{photos:[],memos:[],text:""};
+    setTextDraft(e.text||"");
+    setTextMode(false);
+    setSelected(d);setPanel(true);
+  }
 
   function updateEntry(updates){
     setEntries(prev=>{
-      const next={...prev,[key]:{...(prev[key]||{photos:[],memos:[]}), ...updates}};
+      const cur=prev[key]||{photos:[],memos:[],text:""};
+      const next=Object.assign({},prev,{[key]:Object.assign({},cur,updates)});
       dbSet(key,next[key]).catch(e=>console.warn("保存失敗",e));
       return next;
     });
   }
 
-  function openPhotoPicker(idx=null){replaceIdxRef.current=idx;fileInputRef.current&&fileInputRef.current.click();}
+  function saveText(){updateEntry({text:textDraft});setTextMode(false);}
+
+  function openPhotoPicker(idx){if(idx===undefined)idx=null;replaceIdxRef.current=idx;fileInputRef.current&&fileInputRef.current.click();}
   function handlePhotoUpload(e){
-    const files=Array.from(e.target.files);
-    if(!files.length)return;
+    const files=Array.from(e.target.files);if(!files.length)return;
     const current=[...(entry&&entry.photos||[])];
     if(replaceIdxRef.current!==null){
-      const r=new FileReader();
-      r.onload=ev=>{current[replaceIdxRef.current]={url:ev.target.result,name:files[0].name};updateEntry({photos:current});};
-      r.readAsDataURL(files[0]);
+      const r=new FileReader();r.onload=ev=>{current[replaceIdxRef.current]={url:ev.target.result,name:files[0].name};updateEntry({photos:current});};r.readAsDataURL(files[0]);
     }else{
-      const remaining=3-current.length;
-      if(remaining<=0)return;
+      const remaining=3-current.length;if(remaining<=0)return;
       Promise.all(files.slice(0,remaining).map(f=>new Promise(res=>{const r=new FileReader();r.onload=ev=>res({url:ev.target.result,name:f.name});r.readAsDataURL(f);}))).then(np=>updateEntry({photos:[...current,...np]}));
     }
     e.target.value="";replaceIdxRef.current=null;
@@ -193,8 +236,7 @@ function App(){
           updateEntry({memos});
         };
         reader.readAsDataURL(blob);
-        stream.getTracks().forEach(t=>t.stop());
-        setRecordingTime(0);setRetakeIdx(null);
+        stream.getTracks().forEach(t=>t.stop());setRecordingTime(0);setRetakeIdx(null);
       };
       mr.start();mediaRecorderRef.current=mr;setRetakeIdx(retakeIndex);setRecording(true);
       timerRef.current=setInterval(()=>setRecordingTime(t=>t+1),1000);
@@ -204,6 +246,16 @@ function App(){
   function removeMemo(idx){const m=[...(entry&&entry.memos||[])];m.splice(idx,1);updateEntry({memos:m});}
   function formatTime(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
 
+  function openSlideshow(){
+    const photos=(entry&&entry.photos||[]).map(p=>({type:"photo",url:p.url}));
+    const memos=(entry&&entry.memos||[]).map(m=>({type:"audio",url:m.url,date:m.date,duration:m.duration}));
+    const text=(entry&&entry.text)?[{type:"text",text:entry.text}]:[];
+    const items=[...photos,...text,...memos];
+    if(!items.length)return;
+    setSlideshow({items,idx:0,playing:false});
+    setPanel(false);
+  }
+
   const daysInMonth=getDaysInMonth(year,month);
   const firstDay=getFirstDay(year,month);
   const cells=[];
@@ -212,6 +264,9 @@ function App(){
   while(cells.length%7!==0)cells.push(null);
 
   if(!loaded)return React.createElement("div",{style:{color:"#555",textAlign:"center",paddingTop:100,fontSize:12,letterSpacing:2}},"LOADING...");
+
+  const ss=slideshow;
+  const ssItem=ss&&ss.items[ss.idx];
 
   return(
     <div style={{minHeight:"100vh",background:"#000",color:"#fff",display:"flex",justifyContent:"center"}}>
@@ -232,17 +287,23 @@ function App(){
             const idx=dayKey?(photoIdx[dayKey]||0):0;
             const currentPhoto=photos[idx]&&photos[idx].url||null;
             const hasMemo=dayKey?(entries[dayKey]&&entries[dayKey].memos&&entries[dayKey].memos.length>0):false;
+            const hasText=dayKey?(entries[dayKey]&&entries[dayKey].text&&entries[dayKey].text.length>0):false;
             const isT=d&&d===today.getDate()&&month===today.getMonth()&&year===today.getFullYear();
             const isSel=d&&d===selected;
             return(
-              <div key={i} className={"cal-cell"+(d?"":" empty")+(isT?" today":"")+(isSel?" selected":"")+(currentPhoto?" has-photo":"")} onClick={()=>d&&selectDay(d)}>
-                {currentPhoto&&<div className="cal-photo-bg" style={{backgroundImage:"url("+currentPhoto+")"}} onClick={e=>{if(photos.length<=1)return;e.stopPropagation();setPhotoIdx(prev=>Object.assign({},prev,{[dayKey]:(idx+1)%photos.length}));}}/>}
+              <div key={i} className={"cal-cell"+(d?"":" empty")+(isT?" today":"")+(isSel?" selected":"")} onClick={()=>d&&selectDay(d)}>
                 {d&&<React.Fragment>
-                  <div className="cal-num">{d}</div>
-                  {(photos.length>1||hasMemo)&&<div className="dot-row">
-                    {photos.length>1&&photos.map((_,pi)=><div key={pi} className="dot" style={{opacity:pi===idx?1:0.3}}/>)}
-                    {hasMemo&&<div className="dot" style={{background:"#888"}}/>}
-                  </div>}
+                  <div className="cal-date-bar">
+                    <span className="cal-num">{d}</span>
+                  </div>
+                  <div className="cal-photo-area" onClick={e=>{if(photos.length<=1)return;e.stopPropagation();setPhotoIdx(prev=>Object.assign({},prev,{[dayKey]:(idx+1)%photos.length}));}}>
+                    {currentPhoto&&<img className="cal-photo-img" src={currentPhoto} alt=""/>}
+                    {(photos.length>1||hasMemo||hasText)&&<div className="dot-row">
+                      {photos.length>1&&photos.map((_,pi)=><div key={pi} className="dot" style={{opacity:pi===idx?1:0.3}}/>)}
+                      {hasMemo&&<div className="dot" style={{background:"#888"}}/>}
+                      {hasText&&<div className="dot" style={{background:"#888"}}/>}
+                    </div>}
+                  </div>
                 </React.Fragment>}
               </div>
             );
@@ -256,8 +317,15 @@ function App(){
             <div className="panel-handle"/>
             <div className="panel-header">
               <div className="panel-date">{year}年{month+1}月{selected}日</div>
-              <button className="close-btn" onClick={()=>setPanel(false)}>x</button>
+              <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                {((entry&&entry.photos&&entry.photos.length>0)||(entry&&entry.memos&&entry.memos.length>0)||(entry&&entry.text))&&
+                  <button style={{background:"none",border:"1px solid #333",borderRadius:6,color:"#fff",fontSize:10,fontWeight:600,padding:"4px 10px",cursor:"pointer",letterSpacing:1,fontFamily:"inherit"}} onClick={openSlideshow}>▶ 再生</button>
+                }
+                <button className="close-btn" onClick={()=>setPanel(false)}>x</button>
+              </div>
             </div>
+
+            {/* Photos */}
             <div className="section">
               <div className="section-label">写真 {entry&&entry.photos&&entry.photos.length||0} / 3</div>
               <div className="photo-grid">
@@ -266,10 +334,34 @@ function App(){
                     <img src={p.url} alt=""/>
                   </div>
                 ))}
-                {(entry&&entry.photos&&entry.photos.length||0)<3&&<div className="photo-cell add" onClick={()=>openPhotoPicker(null)}>+</div>}
+                {(entry&&entry.photos&&entry.photos.length||0)<3&&<div className="photo-cell add" onClick={()=>openPhotoPicker()}>+</div>}
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" multiple style={{display:"none"}} onChange={handlePhotoUpload}/>
             </div>
+
+            {/* Text memo */}
+            <div className="section">
+              <div className="section-label">テキスト</div>
+              {textMode?(
+                <React.Fragment>
+                  <textarea className="text-input" value={textDraft} onChange={e=>setTextDraft(e.target.value)} placeholder="今日のことを書く..."/>
+                  <button className="text-save-btn" onClick={saveText}>保存</button>
+                </React.Fragment>
+              ):(
+                <React.Fragment>
+                  {entry&&entry.text&&entry.text.length>0?(
+                    <React.Fragment>
+                      <div className="text-saved">{entry.text}</div>
+                      <button className="text-edit-btn" onClick={()=>{setTextDraft(entry.text||"");setTextMode(true);}}>編集</button>
+                    </React.Fragment>
+                  ):(
+                    <button className="text-save-btn" onClick={()=>setTextMode(true)}>+ テキストを追加</button>
+                  )}
+                </React.Fragment>
+              )}
+            </div>
+
+            {/* Voice memos */}
             <div className="section">
               <div className="section-label">ボイスメモ {entry&&entry.memos&&entry.memos.length||0} 件</div>
               {entry&&entry.memos&&entry.memos.map((m,i)=>(
@@ -290,7 +382,7 @@ function App(){
               ))}
               {recording&&retakeIdx===null
                 ?<button className="rec-btn active" onClick={stopRecording}><div className="rec-dot"/>録音中 {formatTime(recordingTime)}</button>
-                :<button className="rec-btn idle" onClick={()=>!recording&&startRecording(null)} disabled={recording} style={{opacity:recording?0.3:1}}><div className="rec-dot"/>録音開始</button>
+                :<button className="rec-btn idle" onClick={()=>!recording&&startRecording()} disabled={recording} style={{opacity:recording?0.3:1}}><div className="rec-dot"/>録音開始</button>
               }
               {recording&&<div className="retake-hint">{retakeIdx!==null?"メモ "+(retakeIdx+1)+" を録り直し中":"新規録音中"}</div>}
             </div>
@@ -298,6 +390,7 @@ function App(){
         </div>
       )}
 
+      {/* Lightbox */}
       {lightbox&&(
         <div className="lightbox">
           <div className="lightbox-header">
@@ -314,6 +407,42 @@ function App(){
             {lightbox.photos.length>1&&<button className="lightbox-arrow right" onClick={()=>setLightbox(lb=>Object.assign({},lb,{idx:(lb.idx+1)%lb.photos.length}))}><span className="lb-tri-right"/></button>}
           </div>
           {lightbox.photos.length>1&&<div className="lightbox-dots">{lightbox.photos.map((_,i)=><div key={i} className="lightbox-dot" style={{opacity:i===lightbox.idx?1:0.25}}/>)}</div>}
+        </div>
+      )}
+
+      {/* Slideshow */}
+      {ss&&(
+        <div className="slideshow">
+          <div className="slideshow-header">
+            <span className="slideshow-title">{year}年{month+1}月{selected}日</span>
+            <button className="slideshow-close" onClick={()=>{clearTimeout(ssTimerRef.current);setSlideshow(null);setPanel(true);}}>x</button>
+          </div>
+          <div className="slideshow-main">
+            {ssItem&&ssItem.type==="photo"&&<img className="slideshow-photo" src={ssItem.url} alt=""/>}
+            {ssItem&&ssItem.type==="text"&&<div className="slideshow-text-card">{ssItem.text}</div>}
+            {ssItem&&ssItem.type==="audio"&&(
+              <div className="slideshow-audio-card">
+                <div className="slideshow-audio-icon">🎙</div>
+                <div className="slideshow-audio-time">{ssItem.date} / {formatTime(ssItem.duration)}</div>
+                <audio src={ssItem.url} controls autoPlay/>
+              </div>
+            )}
+          </div>
+          <div className="slideshow-footer">
+            <div style={{fontSize:9,color:"#444",letterSpacing:2,textTransform:"uppercase"}}>
+              {ssItem&&ssItem.type==="photo"?"PHOTO":ssItem&&ssItem.type==="text"?"TEXT":"VOICE"}
+            </div>
+            <div className="slideshow-progress">
+              {ss.items.map((_,i)=><div key={i} className="ss-dot" style={{opacity:i===ss.idx?1:0.25}}/>)}
+            </div>
+            <div className="slideshow-controls">
+              <button className="ss-ctrl-btn" onClick={()=>setSlideshow(s=>Object.assign({},s,{idx:Math.max(0,s.idx-1),playing:false}))}>&#9664;</button>
+              <button className="ss-play-btn" onClick={()=>setSlideshow(s=>Object.assign({},s,{playing:!s.playing}))}>
+                {ss.playing?"⏸":"▶"}
+              </button>
+              <button className="ss-ctrl-btn" onClick={()=>setSlideshow(s=>Object.assign({},s,{idx:Math.min(s.items.length-1,s.idx+1),playing:false}))}>&#9654;</button>
+            </div>
+          </div>
         </div>
       )}
     </div>
