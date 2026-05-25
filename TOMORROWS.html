@@ -171,11 +171,14 @@ function App(){
   // Slideshow auto-advance
   React.useEffect(()=>{
     if(slideshow&&slideshow.playing){
+      const item=slideshow.items[slideshow.idx];
+      // audio: use duration+1s, daylabel: 2s, others: 3s
+      const delay=item&&item.type==="audio"?((item.duration||3)+1)*1000:item&&item.type==="daylabel"?2000:3000;
       ssTimerRef.current=setTimeout(()=>{
         const next=slideshow.idx+1;
         if(next>=slideshow.items.length){setSlideshow(s=>Object.assign({},s,{playing:false}));}
         else{setSlideshow(s=>Object.assign({},s,{idx:next}));}
-      },3000);
+      },delay);
     }
     return()=>clearTimeout(ssTimerRef.current);
   },[slideshow]);
@@ -252,8 +255,30 @@ function App(){
     const text=(entry&&entry.text)?[{type:"text",text:entry.text}]:[];
     const items=[...photos,...text,...memos];
     if(!items.length)return;
-    setSlideshow({items,idx:0,playing:false});
+    setSlideshow({items,idx:0,playing:false,monthMode:false});
     setPanel(false);
+  }
+
+  function openMonthSlideshow(){
+    const daysInM=getDaysInMonth(year,month);
+    const items=[];
+    for(let d=1;d<=daysInM;d++){
+      const k=year+"-"+(month+1)+"-"+d;
+      const e=entries[k];
+      if(!e)continue;
+      const hasContent=(e.photos&&e.photos.length>0)||(e.text&&e.text.length>0)||(e.memos&&e.memos.length>0);
+      if(!hasContent)continue;
+      // day label
+      items.push({type:"daylabel",day:d,month:month+1,year});
+      // photos
+      if(e.photos)e.photos.forEach(p=>items.push({type:"photo",url:p.url,day:d}));
+      // text
+      if(e.text&&e.text.length>0)items.push({type:"text",text:e.text,day:d});
+      // memos
+      if(e.memos)e.memos.forEach(m=>items.push({type:"audio",url:m.url,date:m.date,duration:m.duration,day:d}));
+    }
+    if(!items.length){alert("この月にはデータがありません");return;}
+    setSlideshow({items,idx:0,playing:false,monthMode:true});
   }
 
   const daysInMonth=getDaysInMonth(year,month);
@@ -275,9 +300,10 @@ function App(){
           <div className="header-app-title">TOMORROWS</div>
           <div className="header-nav">
             <button className="nav-btn" onClick={prevMonth}><span className="tri tri-left"/></button>
-            <div className="header-title">{year}_{MONTH_NAMES[month]}</div>
+            <div className="header-title" style={{cursor:"pointer"}} onClick={openMonthSlideshow}>{year}_{MONTH_NAMES[month]}</div>
             <button className="nav-btn" onClick={nextMonth}><span className="tri tri-right"/></button>
           </div>
+          <div style={{fontSize:9,color:"#333",letterSpacing:2}}>月名をタップで月間再生</div>
         </div>
         <div className="day-header-grid">{DAYS.map(d=><div key={d} className="day-header-cell">{d}</div>)}</div>
         <div className="cal-grid">
@@ -418,6 +444,13 @@ function App(){
             <button className="slideshow-close" onClick={()=>{clearTimeout(ssTimerRef.current);setSlideshow(null);setPanel(true);}}>x</button>
           </div>
           <div className="slideshow-main">
+            {ssItem&&ssItem.type==="daylabel"&&(
+              <div style={{textAlign:"center",animation:"ssIn 0.4s ease"}}>
+                <div style={{fontSize:11,color:"#555",letterSpacing:3,marginBottom:8}}>{ssItem.year}年</div>
+                <div style={{fontSize:64,fontWeight:700,color:"#fff",lineHeight:1}}>{ssItem.day}</div>
+                <div style={{fontSize:14,color:"#555",letterSpacing:2,marginTop:8}}>{MONTH_NAMES[ssItem.month-1]}</div>
+              </div>
+            )}
             {ssItem&&ssItem.type==="photo"&&<img className="slideshow-photo" src={ssItem.url} alt=""/>}
             {ssItem&&ssItem.type==="text"&&<div className="slideshow-text-card">{ssItem.text}</div>}
             {ssItem&&ssItem.type==="audio"&&(
@@ -430,7 +463,7 @@ function App(){
           </div>
           <div className="slideshow-footer">
             <div style={{fontSize:9,color:"#444",letterSpacing:2,textTransform:"uppercase"}}>
-              {ssItem&&ssItem.type==="photo"?"PHOTO":ssItem&&ssItem.type==="text"?"TEXT":"VOICE"}
+              {ssItem&&ssItem.type==="daylabel"?"DATE":ssItem&&ssItem.type==="photo"?"PHOTO":ssItem&&ssItem.type==="text"?"TEXT":"VOICE"}
             </div>
             <div className="slideshow-progress">
               {ss.items.map((_,i)=><div key={i} className="ss-dot" style={{opacity:i===ss.idx?1:0.25}}/>)}
