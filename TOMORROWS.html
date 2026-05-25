@@ -100,7 +100,9 @@ function App(){
   const [year,setYear]=React.useState(today.getFullYear());
   const [month,setMonth]=React.useState(today.getMonth());
   const [selected,setSelected]=React.useState(null);
-  const [entries,setEntries]=React.useState({});
+  const [entries,setEntries]=React.useState(()=>{
+    try{const s=localStorage.getItem("tomorrows_entries");return s?JSON.parse(s):{};}catch{return{};}
+  });
   const [panel,setPanel]=React.useState(false);
   const [recording,setRecording]=React.useState(false);
   const [recordingTime,setRecordingTime]=React.useState(0);
@@ -119,7 +121,13 @@ function App(){
   function prevMonth(){if(month===0){setYear(y=>y-1);setMonth(11);}else setMonth(m=>m-1);setSelected(null);setPanel(false);}
   function nextMonth(){if(month===11){setYear(y=>y+1);setMonth(0);}else setMonth(m=>m+1);setSelected(null);setPanel(false);}
   function selectDay(d){setSelected(d);setPanel(true);}
-  function updateEntry(updates){setEntries(prev=>({...prev,[key]:{...(prev[key]||{photos:[],memos:[]}), ...updates}}));}
+  function updateEntry(updates){
+    setEntries(prev=>{
+      const next={...prev,[key]:{...(prev[key]||{photos:[],memos:[]}), ...updates}};
+      try{localStorage.setItem("tomorrows_entries",JSON.stringify(next));}catch(e){console.warn("保存失敗",e);}
+      return next;
+    });
+  }
 
   function openPhotoPicker(idx=null){replaceIdxRef.current=idx;fileInputRef.current?.click();}
   function handlePhotoUpload(e){
@@ -142,20 +150,27 @@ function App(){
   async function startRecording(retakeIndex=null){
     try{
       const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-      const mr=new MediaRecorder(stream);
+      const mimeType=MediaRecorder.isTypeSupported("audio/mp4")?"audio/mp4":
+                     MediaRecorder.isTypeSupported("audio/aac")?"audio/aac":"audio/webm";
+      const mr=new MediaRecorder(stream,{mimeType});
       chunksRef.current=[];
       mr.ondataavailable=e=>chunksRef.current.push(e.data);
       mr.onstop=()=>{
-        const blob=new Blob(chunksRef.current,{type:"audio/webm"});
-        const url=URL.createObjectURL(blob);
-        const newMemo={url,duration:recordingTime,date:new Date().toLocaleTimeString("ja-JP")};
-        const memos=[...(entry?.memos||[])];
-        if(retakeIndex!==null){memos[retakeIndex]=newMemo;}else{memos.push(newMemo);}
-        updateEntry({memos});stream.getTracks().forEach(t=>t.stop());setRecordingTime(0);setRetakeIdx(null);
+        const blob=new Blob(chunksRef.current,{type:mimeType});
+        const reader=new FileReader();
+        reader.onload=ev=>{
+          const base64=ev.target.result;
+          const newMemo={url:base64,duration:recordingTime,date:new Date().toLocaleTimeString("ja-JP")};
+          const memos=[...(entry?.memos||[])];
+          if(retakeIndex!==null){memos[retakeIndex]=newMemo;}else{memos.push(newMemo);}
+          updateEntry({memos});
+        };
+        reader.readAsDataURL(blob);
+        stream.getTracks().forEach(t=>t.stop());setRecordingTime(0);setRetakeIdx(null);
       };
       mr.start();mediaRecorderRef.current=mr;setRetakeIdx(retakeIndex);setRecording(true);
       timerRef.current=setInterval(()=>setRecordingTime(t=>t+1),1000);
-    }catch{alert("マイクへのアクセスが必要です");}
+    }catch(err){alert("マイクへのアクセスが必要です: "+err.message);}
   }
   function stopRecording(){if(mediaRecorderRef.current)mediaRecorderRef.current.stop();clearInterval(timerRef.current);setRecording(false);}
   function removeMemo(idx){const m=[...(entry?.memos||[])];m.splice(idx,1);updateEntry({memos:m});}
