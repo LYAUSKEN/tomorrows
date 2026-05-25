@@ -13,15 +13,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#000;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP','Yu Gothic',sans-serif;}
-::-webkit-scrollbar{width:2px;}
-::-webkit-scrollbar-thumb{background:#333;}
+body{background:#000;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;}
+::-webkit-scrollbar{width:2px;}::-webkit-scrollbar-thumb{background:#333;}
 .iphone-wrap{width:100%;max-width:390px;min-height:100vh;display:flex;flex-direction:column;border-left:1px solid #1a1a1a;border-right:1px solid #1a1a1a;margin:0 auto;}
 .header{padding:52px 20px 12px;border-bottom:1px solid #222;display:flex;flex-direction:column;align-items:center;gap:6px;}
 .header-app-title{font-size:10px;font-weight:700;letter-spacing:5px;color:#444;}
 .header-nav{width:100%;display:flex;align-items:center;justify-content:space-between;}
 .header-title{font-size:26px;font-weight:700;letter-spacing:-0.5px;color:#fff;}
-.nav-btn{background:none;border:none;cursor:pointer;padding:0;opacity:0.85;transition:opacity 0.15s;display:flex;align-items:center;justify-content:center;width:36px;height:36px;}
+.nav-btn{background:none;border:none;cursor:pointer;padding:0;opacity:0.85;width:36px;height:36px;display:flex;align-items:center;justify-content:center;}
 .nav-btn:active{opacity:0.3;}
 .tri{width:0;height:0;display:block;}
 .tri-left{border-top:9px solid transparent;border-bottom:9px solid transparent;border-right:15px solid #fff;}
@@ -29,7 +28,7 @@ body{background:#000;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP','Yu 
 .day-header-grid{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid #1a1a1a;}
 .day-header-cell{padding:10px 0 8px;text-align:center;font-size:11px;font-weight:500;color:#555;letter-spacing:0.5px;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);flex:1;}
-.cal-cell{border-right:1px solid #111;border-bottom:1px solid #111;min-height:64px;display:flex;flex-direction:column;align-items:center;padding-top:8px;cursor:pointer;position:relative;transition:background 0.1s;overflow:hidden;}
+.cal-cell{border-right:1px solid #111;border-bottom:1px solid #111;min-height:64px;display:flex;flex-direction:column;align-items:center;padding-top:8px;cursor:pointer;position:relative;overflow:hidden;}
 .cal-cell:nth-child(7n){border-right:none;}
 .cal-cell:active{background:#111;}
 .cal-cell.empty{cursor:default;}
@@ -45,64 +44,88 @@ body{background:#000;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP','Yu 
 @keyframes slideUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
 .panel-handle{width:36px;height:4px;background:#444;border-radius:2px;margin:12px auto 0;}
 .panel-header{padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #222;}
-.panel-date{font-size:18px;font-weight:700;color:#fff;letter-spacing:-0.3px;}
+.panel-date{font-size:18px;font-weight:700;color:#fff;}
 .close-btn{background:#222;border:none;color:#888;width:28px;height:28px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .section{padding:16px 20px;border-bottom:1px solid #1a1a1a;}
 .section-label{font-size:10px;font-weight:600;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
 .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
 .photo-cell{aspect-ratio:1;border:1px solid #333;border-radius:6px;overflow:hidden;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#0a0a0a;}
-.photo-cell img{width:100%;height:100%;object-fit:cover;transition:opacity 0.15s;}
-.photo-cell:active img{opacity:0.7;}
-.photo-cell.add{color:#444;font-size:22px;transition:all 0.15s;}
+.photo-cell img{width:100%;height:100%;object-fit:cover;}
+.photo-cell.add{color:#444;font-size:22px;}
 .memo-item{border:1px solid #222;border-radius:8px;padding:10px 12px;margin-bottom:8px;}
 .memo-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
-.memo-time{font-size:10px;color:#555;white-space:nowrap;flex:1;}
-.memo-dur{font-size:10px;color:#555;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.memo-time{font-size:10px;color:#555;flex:1;}
+.memo-dur{font-size:10px;color:#555;font-variant-numeric:tabular-nums;}
 .memo-actions{display:flex;gap:6px;}
-.memo-icon-btn{background:none;border:1px solid #333;border-radius:4px;color:#888;font-size:10px;font-weight:600;letter-spacing:0.5px;padding:3px 8px;cursor:pointer;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;gap:3px;white-space:nowrap;}
+.memo-icon-btn{background:none;border:1px solid #333;border-radius:4px;color:#888;font-size:10px;font-weight:600;padding:3px 8px;cursor:pointer;font-family:inherit;white-space:nowrap;}
 .memo-icon-btn.retaking{border-color:#fff;color:#000;background:#fff;}
 .memo-item audio{width:100%;height:28px;filter:invert(1);display:block;}
-.rec-btn{width:100%;padding:14px;border-radius:8px;font-size:13px;font-weight:600;letter-spacing:1px;cursor:pointer;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;}
+.rec-btn{width:100%;padding:14px;border-radius:8px;font-size:13px;font-weight:600;letter-spacing:1px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;}
 .rec-btn.idle{background:#000;border:1px solid #333;color:#fff;}
 .rec-btn.active{background:#fff;border:1px solid #fff;color:#000;animation:recPulse 1.2s ease-in-out infinite;}
 @keyframes recPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,0.15);}50%{box-shadow:0 0 0 8px rgba(255,255,255,0);}}
 .rec-dot{width:8px;height:8px;border-radius:50%;background:currentColor;}
-.retake-hint{font-size:10px;color:#555;text-align:center;margin-top:8px;letter-spacing:0.5px;}
+.retake-hint{font-size:10px;color:#555;text-align:center;margin-top:8px;}
 .lightbox{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;animation:fadeIn 0.2s ease;}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 .lightbox-header{display:flex;align-items:center;justify-content:space-between;padding:52px 20px 12px;flex-shrink:0;}
 .lightbox-counter{font-size:12px;color:#555;letter-spacing:1px;}
-.lightbox-close{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;padding:4px;}
-.lightbox-actions{display:flex;gap:8px;padding:12px 20px 0;flex-shrink:0;justify-content:flex-end;}
-.lb-action-btn{background:none;border:1px solid #444;border-radius:6px;color:#fff;font-size:11px;font-weight:600;letter-spacing:1px;padding:6px 14px;cursor:pointer;font-family:inherit;}
+.lightbox-close{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;}
+.lightbox-actions{display:flex;gap:8px;padding:12px 20px 0;justify-content:flex-end;}
+.lb-action-btn{background:none;border:1px solid #444;border-radius:6px;color:#fff;font-size:11px;font-weight:600;padding:6px 14px;cursor:pointer;font-family:inherit;}
 .lb-action-btn.danger{color:#ff5a5a;border-color:#ff5a5a44;}
 .lightbox-img-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:0 48px;position:relative;overflow:hidden;}
-.lightbox-img-wrap img{max-width:100%;max-height:100%;object-fit:contain;border-radius:2px;border:4px solid #fff;}
+.lightbox-img-wrap img{max-width:100%;max-height:100%;object-fit:contain;border:4px solid #fff;border-radius:2px;}
 .lightbox-arrow{position:absolute;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:16px;opacity:0.6;}
-.lightbox-arrow.left{left:0;}
-.lightbox-arrow.right{right:0;}
+.lightbox-arrow.left{left:0;}.lightbox-arrow.right{right:0;}
 .lb-tri-left{width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:13px solid #fff;display:block;}
 .lb-tri-right{width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:13px solid #fff;display:block;}
-.lightbox-dots{display:flex;justify-content:center;gap:6px;padding:16px 0 40px;flex-shrink:0;}
-.lightbox-dot{width:5px;height:5px;border-radius:50%;background:#fff;transition:opacity 0.15s;}
+.lightbox-dots{display:flex;justify-content:center;gap:6px;padding:16px 0 40px;}
+.lightbox-dot{width:5px;height:5px;border-radius:50%;background:#fff;}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const DAYS = ["sun","mon","tue","wed","thu","fri","sat"];
-const MONTH_NAMES = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+const DAYS=["sun","mon","tue","wed","thu","fri","sat"];
+const MONTH_NAMES=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
 function getDaysInMonth(y,m){return new Date(y,m+1,0).getDate();}
 function getFirstDay(y,m){return new Date(y,m,1).getDay();}
+
+const DB_NAME="tomorrows_db";
+const STORE="entries";
+function openDB(){
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open(DB_NAME,1);
+    req.onupgradeneeded=e=>e.target.result.createObjectStore(STORE,{keyPath:"id"});
+    req.onsuccess=e=>res(e.target.result);
+    req.onerror=rej;
+  });
+}
+async function dbGetAll(){
+  const db=await openDB();
+  return new Promise((res,rej)=>{
+    const req=db.transaction(STORE,"readonly").objectStore(STORE).getAll();
+    req.onsuccess=e=>{const o={};e.target.result.forEach(r=>o[r.id]=r.data);res(o);};
+    req.onerror=rej;
+  });
+}
+async function dbSet(id,data){
+  const db=await openDB();
+  return new Promise((res,rej)=>{
+    const tx=db.transaction(STORE,"readwrite");
+    tx.objectStore(STORE).put({id,data});
+    tx.oncomplete=res;tx.onerror=rej;
+  });
+}
 
 function App(){
   const today=new Date();
   const [year,setYear]=React.useState(today.getFullYear());
   const [month,setMonth]=React.useState(today.getMonth());
   const [selected,setSelected]=React.useState(null);
-  const [entries,setEntries]=React.useState(()=>{
-    try{const s=localStorage.getItem("tomorrows_entries");return s?JSON.parse(s):{};}catch{return{};}
-  });
+  const [entries,setEntries]=React.useState({});
+  const [loaded,setLoaded]=React.useState(false);
   const [panel,setPanel]=React.useState(false);
   const [recording,setRecording]=React.useState(false);
   const [recordingTime,setRecordingTime]=React.useState(0);
@@ -115,25 +138,30 @@ function App(){
   const fileInputRef=React.useRef(null);
   const replaceIdxRef=React.useRef(null);
 
+  React.useEffect(()=>{
+    dbGetAll().then(d=>{setEntries(d);setLoaded(true);}).catch(()=>setLoaded(true));
+  },[]);
+
   const key=selected?`${year}-${month+1}-${selected}`:null;
   const entry=key?(entries[key]||{photos:[],memos:[]}):null;
 
   function prevMonth(){if(month===0){setYear(y=>y-1);setMonth(11);}else setMonth(m=>m-1);setSelected(null);setPanel(false);}
   function nextMonth(){if(month===11){setYear(y=>y+1);setMonth(0);}else setMonth(m=>m+1);setSelected(null);setPanel(false);}
   function selectDay(d){setSelected(d);setPanel(true);}
+
   function updateEntry(updates){
     setEntries(prev=>{
       const next={...prev,[key]:{...(prev[key]||{photos:[],memos:[]}), ...updates}};
-      try{localStorage.setItem("tomorrows_entries",JSON.stringify(next));}catch(e){console.warn("保存失敗",e);}
+      dbSet(key,next[key]).catch(e=>console.warn("保存失敗",e));
       return next;
     });
   }
 
-  function openPhotoPicker(idx=null){replaceIdxRef.current=idx;fileInputRef.current?.click();}
+  function openPhotoPicker(idx=null){replaceIdxRef.current=idx;fileInputRef.current&&fileInputRef.current.click();}
   function handlePhotoUpload(e){
     const files=Array.from(e.target.files);
     if(!files.length)return;
-    const current=[...(entry?.photos||[])];
+    const current=[...(entry&&entry.photos||[])];
     if(replaceIdxRef.current!==null){
       const r=new FileReader();
       r.onload=ev=>{current[replaceIdxRef.current]={url:ev.target.result,name:files[0].name};updateEntry({photos:current});};
@@ -145,13 +173,13 @@ function App(){
     }
     e.target.value="";replaceIdxRef.current=null;
   }
-  function removePhoto(idx){const p=[...(entry?.photos||[])];p.splice(idx,1);updateEntry({photos:p});}
+  function removePhoto(idx){const p=[...(entry&&entry.photos||[])];p.splice(idx,1);updateEntry({photos:p});}
 
-  async function startRecording(retakeIndex=null){
+  async function startRecording(retakeIndex){
+    if(retakeIndex===undefined)retakeIndex=null;
     try{
       const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-      const mimeType=MediaRecorder.isTypeSupported("audio/mp4")?"audio/mp4":
-                     MediaRecorder.isTypeSupported("audio/aac")?"audio/aac":"audio/webm";
+      const mimeType=MediaRecorder.isTypeSupported("audio/mp4")?"audio/mp4":MediaRecorder.isTypeSupported("audio/aac")?"audio/aac":"audio/webm";
       const mr=new MediaRecorder(stream,{mimeType});
       chunksRef.current=[];
       mr.ondataavailable=e=>chunksRef.current.push(e.data);
@@ -159,22 +187,22 @@ function App(){
         const blob=new Blob(chunksRef.current,{type:mimeType});
         const reader=new FileReader();
         reader.onload=ev=>{
-          const base64=ev.target.result;
-          const newMemo={url:base64,duration:recordingTime,date:new Date().toLocaleTimeString("ja-JP")};
-          const memos=[...(entry?.memos||[])];
+          const newMemo={url:ev.target.result,duration:recordingTime,date:new Date().toLocaleTimeString("ja-JP")};
+          const memos=[...(entry&&entry.memos||[])];
           if(retakeIndex!==null){memos[retakeIndex]=newMemo;}else{memos.push(newMemo);}
           updateEntry({memos});
         };
         reader.readAsDataURL(blob);
-        stream.getTracks().forEach(t=>t.stop());setRecordingTime(0);setRetakeIdx(null);
+        stream.getTracks().forEach(t=>t.stop());
+        setRecordingTime(0);setRetakeIdx(null);
       };
       mr.start();mediaRecorderRef.current=mr;setRetakeIdx(retakeIndex);setRecording(true);
       timerRef.current=setInterval(()=>setRecordingTime(t=>t+1),1000);
     }catch(err){alert("マイクへのアクセスが必要です: "+err.message);}
   }
   function stopRecording(){if(mediaRecorderRef.current)mediaRecorderRef.current.stop();clearInterval(timerRef.current);setRecording(false);}
-  function removeMemo(idx){const m=[...(entry?.memos||[])];m.splice(idx,1);updateEntry({memos:m});}
-  function formatTime(s){return `${Math.floor(s/60).toString().padStart(2,"0")}:${(s%60).toString().padStart(2,"0")}`;}
+  function removeMemo(idx){const m=[...(entry&&entry.memos||[])];m.splice(idx,1);updateEntry({memos:m});}
+  function formatTime(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
 
   const daysInMonth=getDaysInMonth(year,month);
   const firstDay=getFirstDay(year,month);
@@ -183,10 +211,9 @@ function App(){
   for(let d=1;d<=daysInMonth;d++)cells.push(d);
   while(cells.length%7!==0)cells.push(null);
 
-  const isToday=d=>d===today.getDate()&&month===today.getMonth()&&year===today.getFullYear();
-  const isSelected=d=>d===selected;
+  if(!loaded)return React.createElement("div",{style:{color:"#555",textAlign:"center",paddingTop:100,fontSize:12,letterSpacing:2}},"LOADING...");
 
-  return (
+  return(
     <div style={{minHeight:"100vh",background:"#000",color:"#fff",display:"flex",justifyContent:"center"}}>
       <div className="iphone-wrap">
         <div className="header">
@@ -200,21 +227,23 @@ function App(){
         <div className="day-header-grid">{DAYS.map(d=><div key={d} className="day-header-cell">{d}</div>)}</div>
         <div className="cal-grid">
           {cells.map((d,i)=>{
-            const dayKey=d?`${year}-${month+1}-${d}`:null;
-            const photos=dayKey?(entries[dayKey]?.photos||[]):[];
+            const dayKey=d?year+"-"+(month+1)+"-"+d:null;
+            const photos=dayKey?(entries[dayKey]&&entries[dayKey].photos||[]):[];
             const idx=dayKey?(photoIdx[dayKey]||0):0;
-            const currentPhoto=photos[idx]?.url||null;
-            const hasMemo=dayKey?(entries[dayKey]?.memos?.length>0):false;
+            const currentPhoto=photos[idx]&&photos[idx].url||null;
+            const hasMemo=dayKey?(entries[dayKey]&&entries[dayKey].memos&&entries[dayKey].memos.length>0):false;
+            const isT=d&&d===today.getDate()&&month===today.getMonth()&&year===today.getFullYear();
+            const isSel=d&&d===selected;
             return(
-              <div key={i} className={`cal-cell${!d?" empty":""}${d&&isToday(d)?" today":""}${d&&isSelected(d)?" selected":""}${currentPhoto?" has-photo":""}`} onClick={()=>d&&selectDay(d)}>
-                {currentPhoto&&<div className="cal-photo-bg" style={{backgroundImage:`url(${currentPhoto})`}} onClick={e=>{if(photos.length<=1)return;e.stopPropagation();setPhotoIdx(prev=>({...prev,[dayKey]:(idx+1)%photos.length}));}}/>}
-                {d&&<>
+              <div key={i} className={"cal-cell"+(d?"":" empty")+(isT?" today":"")+(isSel?" selected":"")+(currentPhoto?" has-photo":"")} onClick={()=>d&&selectDay(d)}>
+                {currentPhoto&&<div className="cal-photo-bg" style={{backgroundImage:"url("+currentPhoto+")"}} onClick={e=>{if(photos.length<=1)return;e.stopPropagation();setPhotoIdx(prev=>Object.assign({},prev,{[dayKey]:(idx+1)%photos.length}));}}/>}
+                {d&&<React.Fragment>
                   <div className="cal-num">{d}</div>
                   {(photos.length>1||hasMemo)&&<div className="dot-row">
                     {photos.length>1&&photos.map((_,pi)=><div key={pi} className="dot" style={{opacity:pi===idx?1:0.3}}/>)}
                     {hasMemo&&<div className="dot" style={{background:"#888"}}/>}
                   </div>}
-                </>}
+                </React.Fragment>}
               </div>
             );
           })}
@@ -227,43 +256,43 @@ function App(){
             <div className="panel-handle"/>
             <div className="panel-header">
               <div className="panel-date">{year}年{month+1}月{selected}日</div>
-              <button className="close-btn" onClick={()=>setPanel(false)}>×</button>
+              <button className="close-btn" onClick={()=>setPanel(false)}>x</button>
             </div>
             <div className="section">
-              <div className="section-label">写真 {entry?.photos?.length||0} / 3</div>
+              <div className="section-label">写真 {entry&&entry.photos&&entry.photos.length||0} / 3</div>
               <div className="photo-grid">
-                {entry?.photos?.map((p,i)=>(
+                {entry&&entry.photos&&entry.photos.map((p,i)=>(
                   <div key={i} className="photo-cell" onClick={()=>setLightbox({photos:entry.photos,idx:i})}>
                     <img src={p.url} alt=""/>
                   </div>
                 ))}
-                {(entry?.photos?.length||0)<3&&<div className="photo-cell add" onClick={()=>openPhotoPicker(null)}>+</div>}
+                {(entry&&entry.photos&&entry.photos.length||0)<3&&<div className="photo-cell add" onClick={()=>openPhotoPicker(null)}>+</div>}
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" multiple style={{display:"none"}} onChange={handlePhotoUpload}/>
             </div>
             <div className="section">
-              <div className="section-label">ボイスメモ {entry?.memos?.length||0} 件</div>
-              {entry?.memos?.map((m,i)=>(
+              <div className="section-label">ボイスメモ {entry&&entry.memos&&entry.memos.length||0} 件</div>
+              {entry&&entry.memos&&entry.memos.map((m,i)=>(
                 <div key={i} className="memo-item">
                   <div className="memo-top">
                     <span className="memo-time">{m.date}</span>
                     <span className="memo-dur">{formatTime(m.duration)}</span>
                     <div className="memo-actions">
                       {recording&&retakeIdx===i
-                        ?<button className="memo-icon-btn retaking" onClick={stopRecording}>⏹ 停止</button>
-                        :<button className="memo-icon-btn" onClick={()=>!recording&&startRecording(i)} disabled={recording} style={{opacity:recording&&retakeIdx!==i?0.3:1}}>↺ 録り直し</button>
+                        ?<button className="memo-icon-btn retaking" onClick={stopRecording}>停止</button>
+                        :<button className="memo-icon-btn" onClick={()=>!recording&&startRecording(i)} disabled={recording} style={{opacity:recording&&retakeIdx!==i?0.3:1}}>録り直し</button>
                       }
-                      <button className="memo-icon-btn" onClick={()=>removeMemo(i)} disabled={recording}>✕</button>
+                      <button className="memo-icon-btn" onClick={()=>removeMemo(i)} disabled={recording}>削除</button>
                     </div>
                   </div>
                   <audio src={m.url} controls/>
                 </div>
               ))}
               {recording&&retakeIdx===null
-                ?<button className="rec-btn active" onClick={stopRecording}><div className="rec-dot"/>録音中 — {formatTime(recordingTime)}</button>
+                ?<button className="rec-btn active" onClick={stopRecording}><div className="rec-dot"/>録音中 {formatTime(recordingTime)}</button>
                 :<button className="rec-btn idle" onClick={()=>!recording&&startRecording(null)} disabled={recording} style={{opacity:recording?0.3:1}}><div className="rec-dot"/>録音開始</button>
               }
-              {recording&&<div className="retake-hint">{retakeIdx!==null?`メモ ${retakeIdx+1} を録り直し中…`:"新規録音中…"}</div>}
+              {recording&&<div className="retake-hint">{retakeIdx!==null?"メモ "+(retakeIdx+1)+" を録り直し中":"新規録音中"}</div>}
             </div>
           </div>
         </div>
@@ -273,16 +302,16 @@ function App(){
         <div className="lightbox">
           <div className="lightbox-header">
             <span className="lightbox-counter">{lightbox.idx+1} / {lightbox.photos.length}</span>
-            <button className="lightbox-close" onClick={()=>setLightbox(null)}>×</button>
+            <button className="lightbox-close" onClick={()=>setLightbox(null)}>x</button>
           </div>
           <div className="lightbox-actions">
-            <button className="lb-action-btn" onClick={()=>{openPhotoPicker(lightbox.idx);setLightbox(null);}}>↺ 入れ替え</button>
-            <button className="lb-action-btn danger" onClick={()=>{removePhoto(lightbox.idx);setLightbox(null);}}>✕ 削除</button>
+            <button className="lb-action-btn" onClick={()=>{openPhotoPicker(lightbox.idx);setLightbox(null);}}>入れ替え</button>
+            <button className="lb-action-btn danger" onClick={()=>{removePhoto(lightbox.idx);setLightbox(null);}}>削除</button>
           </div>
           <div className="lightbox-img-wrap">
-            {lightbox.photos.length>1&&<button className="lightbox-arrow left" onClick={()=>setLightbox(lb=>({...lb,idx:(lb.idx-1+lb.photos.length)%lb.photos.length}))}><span className="lb-tri-left"/></button>}
+            {lightbox.photos.length>1&&<button className="lightbox-arrow left" onClick={()=>setLightbox(lb=>Object.assign({},lb,{idx:(lb.idx-1+lb.photos.length)%lb.photos.length}))}><span className="lb-tri-left"/></button>}
             <img src={lightbox.photos[lightbox.idx].url} alt=""/>
-            {lightbox.photos.length>1&&<button className="lightbox-arrow right" onClick={()=>setLightbox(lb=>({...lb,idx:(lb.idx+1)%lb.photos.length}))}><span className="lb-tri-right"/></button>}
+            {lightbox.photos.length>1&&<button className="lightbox-arrow right" onClick={()=>setLightbox(lb=>Object.assign({},lb,{idx:(lb.idx+1)%lb.photos.length}))}><span className="lb-tri-right"/></button>}
           </div>
           {lightbox.photos.length>1&&<div className="lightbox-dots">{lightbox.photos.map((_,i)=><div key={i} className="lightbox-dot" style={{opacity:i===lightbox.idx?1:0.25}}/>)}</div>}
         </div>
@@ -290,7 +319,7 @@ function App(){
     </div>
   );
 }
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
 </script>
 </body>
 </html>
