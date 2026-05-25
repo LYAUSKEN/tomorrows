@@ -306,7 +306,6 @@ function App(){
             <div className="header-title" style={{cursor:"pointer"}} onClick={openMonthSlideshow}>{year}_{MONTH_NAMES[month]}</div>
             <button className="nav-btn" onClick={nextMonth}><span className="tri tri-right"/></button>
           </div>
-          <div style={{fontSize:9,color:"#333",letterSpacing:2}}>月名をタップで月間再生</div>
         </div>
         <div className="day-header-grid">{DAYS.map(d=><div key={d} className="day-header-cell">{d}</div>)}</div>
         <div className="cal-grid">
